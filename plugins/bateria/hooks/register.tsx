@@ -45,12 +45,36 @@ export function quedaDe(l: Limite | undefined, ahora: number): number | null {
   return Math.max(0, Math.min(100, Math.round(100 - l.percentUsed)))
 }
 
+export function circulo(queda: number): string {
+  if (queda >= 60) return '🟢'
+  if (queda >= 40) return '🟡'
+  if (queda >= 20) return '🟠'
+  return '🔴'
+}
+
+export function lineaEstado(lista: readonly Limite[], ahora: number): string | undefined {
+  const parte = (kind: string, conFecha: boolean) => {
+    const l = lista.find(x => x.kind === kind)
+    const queda = quedaDe(l, ahora)
+    if (queda === null || !l) return null
+    const yaRecargo = l.resetsAt ? Date.parse(l.resetsAt) <= ahora : false
+    const recarga = !l.resetsAt || yaRecargo ? '' : ` - ${horaEcuador(l.resetsAt, conFecha)}`
+    return `${circulo(queda)} ${queda} %${recarga}`
+  }
+  const partes = [parte('five_hour', false), parte('seven_day', true)].filter(x => x !== null)
+  return partes.length > 0 ? partes.join(' -- ') : undefined
+}
+
 const limpiar = (xs: readonly Limite[]): Limite[] =>
   xs.map(x => ({ kind: x.kind, percentUsed: x.percentUsed, resetsAt: x.resetsAt }))
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     const r = await next(e)
+    await $.command.register({
+      name: 'bateria',
+      description: 'Muestra lo que te queda del límite de 5 horas y del semanal',
+    })
     try {
       const u = await $.session.usage()
       if (u.rateLimits.length > 0) await update($, limites, () => limpiar(u.rateLimits))
@@ -58,6 +82,18 @@ export const register: Register = on => {
       // sin datos todavía
     }
     return r
+  })
+
+  on('command.run', { command: 'bateria' }, async $ => {
+    let lista = await read($, limites)
+    try {
+      const u = await $.session.usage()
+      if (u.rateLimits.length > 0) lista = limpiar(u.rateLimits)
+    } catch {
+      // se usa lo último guardado
+    }
+    const linea = lineaEstado(lista, await $.clock.now())
+    return { text: linea ?? 'Batería sin datos todavía: llegan después de la primera respuesta de Claude.' }
   })
 
   on('session.measure', async ($, e, next) => {

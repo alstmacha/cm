@@ -1,4 +1,5 @@
 import { expect, mock, test } from 'claude-code/testing'
+import { lineaEstado } from '../hooks/register'
 
 // 17/11/2026 12:00 hora de Ecuador = 17:00 UTC
 const AHORA = Date.parse('2026-11-17T17:00:00Z')
@@ -47,4 +48,17 @@ test('si la hora de recarga ya pasó, la batería está llena', async ($, on) =>
   const ui = await $.ui.mount({ ...BANDA, surface: 'desktop' })
   expect((await ui.find({ type: 'Text', text: /^100 %$/ }))?.text).toBe('100 %')
   await ui.unmount()
+})
+
+test('línea de texto con círculos de color', () => {
+  expect(lineaEstado(medir.rateLimits, AHORA)).toBe('🟢 72 % - 15:40 -- 🟢 60 % - 23/11 - 09:00')
+})
+
+test('el comando /bateria contesta con la línea', async ($, on) => {
+  mock.clock(on, { now: AHORA })
+  on('session.measure', (_, e) => ({ changed: e.changed }))
+  on('session.usage', () => ({ value: { startedAt: 0, context: {} as never, rateLimits: medir.rateLimits } }))
+  await $.session.measure(medir as never)
+  const r = await $.command.run({ command: 'bateria', args: '' } as never)
+  expect(JSON.stringify(r)).toContain('72 % - 15:40')
 })

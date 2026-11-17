@@ -4,7 +4,7 @@ Mis mods (plugins) para Claude Code.
 
 | Mod | Qué hace |
 | --- | --- |
-| `bateria` | Batería de colores con lo que te queda del límite de 5 horas y del semanal, con la hora de recarga (hora de Ecuador). |
+| `bateria` | Batería de colores con lo que te queda del límite de 5 horas y del semanal, con la hora de recarga (hora de Ecuador). En las sesiones en la nube se usa con el comando `/bateria`. |
 
 ## Instalar en tu computador (una sola vez)
 
