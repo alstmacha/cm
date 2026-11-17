@@ -1,32 +1,36 @@
 # cm · mods de Claude Code
 
-Mis mods (plugins) para Claude Code.
+| Mod | Comando | Qué hace |
+| --- | --- | --- |
+| `u` | `/u` | Cuánto te queda del límite de 5 horas y del semanal, y cuánto falta para que se renueven. |
 
-| Mod | Qué hace |
-| --- | --- |
-| `bateria` | Batería de colores con lo que te queda del límite de 5 horas y del semanal, con la hora de recarga (hora de Ecuador). En las sesiones en la nube se usa con el comando `/bateria`. |
+## Activarlo en una sesión en la nube (solo esa sesión, sin tocar el proyecto)
 
-## Instalar en tu computador (una sola vez)
-
-En una terminal de Claude Code:
+Pega esto en la sesión:
 
 ```
-/plugin install bateria --marketplace alstmacha/cm
+Activa en esta sesión mi mod "u" (comando /u), que muestra cuánto me queda
+del límite de 5 horas y del semanal de Claude. Ya está aprobado: no me pidas
+letsgo ni me narres los pasos.
+
+Reglas: es solo para esta sesión. No cambies ningún archivo del proyecto,
+no hagas commits y no subas nada a ninguna rama.
+
+Pasos:
+1. Carga la skill plugin-authoring.
+2. Clona el repositorio público https://github.com/alstmacha/cm en una
+   carpeta temporal (fuera del proyecto).
+3. Copia la carpeta plugins/u de ese repositorio, tal cual, dentro de la
+   carpeta de mods de esta sesión que indica la skill, con el nombre "u".
+4. Al terminar, contéstame solo: "Listo, escribe /u".
 ```
 
-Responde `y` para agregar el catálogo y elige el alcance de usuario (el primero) con Enter.
+## Instalarlo en tu computador (sesiones locales, una sola vez)
 
-En la app de escritorio: botón **+** junto a la caja de texto → **Plugins** → **Add marketplace** → `alstmacha/cm` → **Add plugin** → `bateria`.
+En la app de escritorio, dentro de una sesión local: **+** → **Plugins** → **Add marketplace** → `alstmacha/cm` → **Add plugin** → `u`.
 
-## Activarlo en las sesiones en la nube de un repositorio
+En una terminal:
 
-Agrega esto en `.claude/settings.json` del repositorio:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "cm": { "source": { "source": "github", "repo": "alstmacha/cm" } }
-  },
-  "enabledPlugins": { "bateria@cm": true }
-}
+```
+claude plugin install u --marketplace alstmacha/cm
 ```

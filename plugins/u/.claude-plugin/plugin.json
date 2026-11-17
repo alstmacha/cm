@@ -1,0 +1,7 @@
+{
+  "name": "u",
+  "version": "0.3.0",
+  "description": "Lo que te queda del límite de 5 horas y del semanal de Claude, y cuánto falta para que se renueven.",
+  "types": "./types/index.d.ts",
+  "license": "MIT"
+}
