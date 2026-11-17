@@ -1,0 +1,11 @@
+{
+  "name": "cm",
+  "owner": { "name": "alstmacha" },
+  "plugins": [
+    {
+      "name": "bateria",
+      "source": "./plugins/bateria",
+      "description": "Batería de colores con lo que te queda del límite de 5 horas y del semanal de Claude."
+    }
+  ]
+}

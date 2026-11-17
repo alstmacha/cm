@@ -1,0 +1,7 @@
+{
+  "name": "bateria",
+  "version": "0.1.0",
+  "description": "Muestra como batería lo que te queda del límite de 5 horas y del semanal de Claude, con la hora de recarga en hora de Ecuador.",
+  "types": "./types/index.d.ts",
+  "license": "MIT"
+}
